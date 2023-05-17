@@ -3,9 +3,9 @@ from enum import Enum
 import pygame
 import sys
 
-from src.common.constants import FPS, SIZE
 from src.game.main_game import MainGame
 from src.management.scene import Scene
+from src.common import *
 
 class AbortScene(Exception):
     def __str__(self):
@@ -17,10 +17,7 @@ class AbortGame(Exception):
 
 class GameManager:
     def __init__(self) -> None:
-        pygame.init()
-
-        self.flags = DOUBLEBUF | SCALED
-        self.screen = pygame.display.set_mode(SIZE, self.flags)
+        self.window = Window(*SIZE)
         self.clock = pygame.time.Clock()
         self.dt = self.clock.tick_busy_loop(FPS) / 1000
         self.window_changing = False
@@ -48,7 +45,7 @@ class GameManager:
         self.quit()
 
     def update(self) -> None:
-        self.dt = self.clock.tick_busy_loop(FPS) * 0.001
+        self.dt = self.clock.tick_busy_loop(FPS) * 0.05
         # Window changing events only register to the DT the frame after the event
         # Thus the window changing variable is sustained to the next frame, and handled here
         if self.window_changing:

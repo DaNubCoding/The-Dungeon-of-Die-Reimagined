@@ -1,7 +1,7 @@
-import pygame
+from pygame.math import Vector2
 
-VEC = pygame.math.Vector2
+VEC = Vector2
 
-FPS = 60
-WIDTH, HEIGHT = SIZE = 800, 800
+FPS = float("inf")
+WIDTH, HEIGHT = SIZE = 1024, 768
 HSIZE = (WIDTH // 2, HEIGHT // 2)
