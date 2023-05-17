@@ -5,12 +5,15 @@ from src.common.exe import pathof
 def load_image(file: str, scale: int = 1) -> pygame.SurfaceType:
     return pygame.transform.scale_by(pygame.image.load(pathof(f"res/assets/textures/{file}")).convert_alpha(), scale)
 
+class SpriteSheet(list):
+    def __init__(self, path: str, scale: int = 1, size: tuple[int, int] = (64, 64)) -> None:
+        self.image = load_image(path, scale)
+        for i in range(self.image.get_height() // size[1]):
+            self.append(self.image.subsurface((0, i * size[1], *size)))
+
 pygame.display.set_mode((1, 1), pygame.NOFRAME)
 
-cobblestone_spritesheet = load_image("cobblestone.png", 4)
-cobblestones = [cobblestone_spritesheet.subsurface((0, i * 64, 64, 64)) for i in range(cobblestone_spritesheet.get_height() // 64)]
-
-crack_spritesheet = load_image("crack.png", 4)
-cracks = [crack_spritesheet.subsurface((0, i * 64, 64, 64)) for i in range(crack_spritesheet.get_height() // 64)]
+cobblestones = SpriteSheet("cobblestone.png", scale=4)
+cracks = SpriteSheet("crack.png", scale=4)
 
 pygame.display.quit()
