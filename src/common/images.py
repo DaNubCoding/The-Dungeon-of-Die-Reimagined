@@ -15,5 +15,9 @@ pygame.display.set_mode((1, 1), pygame.NOFRAME)
 
 cobblestones = SpriteSheet("cobblestone.png", scale=4)
 cracks = SpriteSheet("crack.png", scale=4)
+for i in range(len(cracks)):
+    cracks.append(pygame.transform.rotate(cracks[i], 90))
+    cracks.append(pygame.transform.rotate(cracks[i], 180))
+    cracks.append(pygame.transform.rotate(cracks[i], 270))
 
 pygame.display.quit()
