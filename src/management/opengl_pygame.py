@@ -29,21 +29,13 @@ class Window:
         self.uvmap = self.ctx.buffer(struct.pack("8f", *[0, 1, 1, 1, 0, 0, 1, 0]))
         self.ibo = self.ctx.buffer(struct.pack("6I", *[0, 1, 2, 1, 2, 3]))
 
-    def render(self, surface: Texture | SimpleSurface, pos: tuple[int, int]) -> None:
+    def render(self, surface: Texture, pos: tuple[int, int]) -> None:
         """Render a surface onto the window default framebuffer."""
         self.ctx.screen.use()
         surface.texture.use()
         surface.shader.send("u_texSize", surface.size)
         surface.move(pos)
         surface.vao.render()
-
-    def render_shaderless(self, surface: Texture, pos: tuple[int, int]) -> None:
-        """Render the surface onto the window without applying a shader. Useful for rendering a surface that has already been processed by a shader."""
-        self.ctx.screen.use()
-        surface.texture.use()
-        surface.default_shader.send("u_texSize", surface.size)
-        surface.default_shader.move(pos)
-        surface.default_vao.render()
 
     def fill(self, color: tuple[int, int, int]) -> None:
         """Fill the default framebuffer with the specified color."""
