@@ -16,8 +16,8 @@ class MainGame(Scene):
         self.tile_manager = TileManager(self)
 
     def update(self) -> None:
-        self.camera.update()
         super().update()
+        self.camera.update()
 
     def draw(self) -> None:
         self.manager.window.fill((0, 0, 0))
