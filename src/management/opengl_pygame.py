@@ -82,9 +82,9 @@ class Texture:
         self.ctx = window.ctx
         if isinstance(src, str):
             src = pygame.image.load(src).convert_alpha()
-        self.surf = pygame.transform.flip(src, False, True)
+        self.surf = src
 
-        self.texture = self.ctx.texture(self.surf.get_size(), 4, self.surf.get_view())
+        self.texture = self.ctx.texture(self.surf.get_size(), 4, pygame.transform.flip(self.surf, False, True).get_view())
         self.texture.repeat_x, self.texture.repeat_y, self.texture.swizzle = False, False, "BGRA"
         self.size = size = VEC(self.surf.get_size())
 
