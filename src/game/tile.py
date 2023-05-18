@@ -30,15 +30,15 @@ class Tile(Sprite):
         self.pos = VEC(pos)
 
     def draw(self) -> None:
-        self.manager.window.render(self.image, self.pos)
+        self.manager.window.render(self.image, self.pos - self.scene.camera.pos)
 
 class Ground(Tile):
     def __init__(self, scene: Scene, image: pygame.Surface, pos: tuple[int, int]) -> None:
-        (surf := pygame.Surface(image.get_size())).fill((25, 25, 25))
-        image.blit(surf, (0, 0), special_flags=BLEND_RGB_SUB)
+        image = pygame.transform.flip(image, True, True)
         super().__init__(scene, Layers.GROUND, image, pos)
 
 class Wall(Tile):
     def __init__(self, scene: Scene, image: pygame.Surface, pos: tuple[int, int]) -> None:
-        image = pygame.transform.flip(image, True, True)
+        (surf := pygame.Surface(image.get_size())).fill((25, 25, 25))
+        image.blit(surf, (0, 0), special_flags=BLEND_RGB_SUB)
         super().__init__(scene, Layers.WALL, image, pos)
