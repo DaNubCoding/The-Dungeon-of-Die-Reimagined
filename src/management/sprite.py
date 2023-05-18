@@ -7,7 +7,7 @@ from abc import ABC as AbstractClass
 from enum import Enum, auto
 
 class Layers(Enum):
-    FLOOR = auto()
+    GROUND = auto()
     WALL = auto()
 
 class Sprite(AbstractClass):
