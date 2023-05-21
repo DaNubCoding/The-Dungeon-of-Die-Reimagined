@@ -26,12 +26,12 @@ class TileManager:
 class Tile(Sprite):
     def __init__(self, scene: Scene, layer: Layers, image: pygame.Surface, pos: tuple[int, int]) -> None:
         super().__init__(scene, layer)
-        self.image = Texture(self.manager.window, image)
+        self.image = Texture(self.manager.window, image, self.scene.player.camera.shader)
         self.size = self.image.size
         self.pos = VEC(pos)
 
     def draw(self) -> None:
-        self.manager.window.render(self.image, screen_pos(self, self.scene.camera))
+        self.manager.window.render(self.image, self.pos)
 
 class Ground(Tile):
     def __init__(self, scene: Scene, image: pygame.Surface, pos: tuple[int, int]) -> None:

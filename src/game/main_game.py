@@ -12,12 +12,10 @@ class MainGame(Scene):
     def setup(self) -> None:
         super().setup()
         self.player = Player(self)
-        self.camera = Camera(self, self.player)
         self.tile_manager = TileManager(self)
 
     def update(self) -> None:
         super().update()
-        self.camera.update()
 
     def draw(self) -> None:
         self.manager.window.fill((0, 0, 0))

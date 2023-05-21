@@ -73,7 +73,8 @@ class Shader:
 
     def move(self, pos: tuple[int, int]) -> None:
         """Prepare the shader to render with an offset next time"""
-        self.send("u_vertexOffset", (pos[0] / self.window.width * 2, -pos[1] / self.window.height * 2))
+        self.send("u_position", pos)
+        self.send("u_screenSize", self.window.size)
 
 class Texture:
     def __init__(self, window: Window, src: pygame.Surface | str, shader: Optional[Shader] = None) -> None:
