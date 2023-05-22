@@ -32,7 +32,7 @@ class TileManager:
         for chunk in self.connected:
             self.stacked_sprites.append(WallGroup(scene, chunk))
 
-        for i in range(16):
+        for i in range(64 // RESOLUTION):
             for sprite in self.stacked_sprites:
                 sprite.build_layer(i)
 
@@ -50,7 +50,7 @@ class Wall:
     def build_images(self) -> list[pygame.SurfaceType]:
         images = []
 
-        for layer in range(15):
+        for layer in range(64 // RESOLUTION - 1):
             images.append(surf := pygame.Surface((64, 64), SRCALPHA))
             for i, exposed in enumerate(self.exposed_sides):
                 if exposed: continue
