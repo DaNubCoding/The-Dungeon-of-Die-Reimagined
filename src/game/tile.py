@@ -51,7 +51,7 @@ class Wall:
         images = []
 
         for layer in range(15):
-            images.append(surf := pygame.Surface((64, 64)))
+            images.append(surf := pygame.Surface((64, 64), SRCALPHA))
             for i, exposed in enumerate(self.exposed_sides):
                 if exposed: continue
                 self.draw_edge(surf, i, layer)
@@ -66,7 +66,8 @@ class Wall:
 
     def draw_edge(self, surf: pygame.SurfaceType, edge: int, layer: int) -> None:
         edge_surf = self.side_faces[edge].subsurface((0, 64 - layer * RESOLUTION - RESOLUTION, 64, RESOLUTION))
-        surf.blit(pygame.transform.rotate(edge_surf, 90 * edge), [(0, 0), (0, 0), (0, 64 - RESOLUTION), (64 - RESOLUTION, 0)][edge])
+        edge_surf = pygame.transform.scale(edge_surf, (edge_surf.get_width(), RESOLUTION + 1))
+        surf.blit(pygame.transform.rotate(edge_surf, 90 * edge), [(0, 0), (0, 0), (0, 64 - RESOLUTION - 1), (64 - RESOLUTION - 1, 0)][edge])
 
 class WallGroup(StackedSprite):
     def __init__(self, scene: Scene, positions: set[tuple[int, int]]) -> None:
