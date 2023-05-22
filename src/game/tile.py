@@ -30,15 +30,16 @@ class TileManager:
         _file.close()
 
         for chunk in self.connected:
-            self.stacked_sprites.append(WallGroup(scene, list(chunk)))
+            self.stacked_sprites.append(WallGroup(scene, chunk))
 
         for i in range(16):
             for sprite in self.stacked_sprites:
                 sprite.build_layer(i)
 
 class Wall:
-    def __init__(self, pos: tuple[int, int]) -> None:
+    def __init__(self, pos: tuple[int, int], exposed_sides: list[bool]) -> None:
         self.pos = VEC(pos) * 64
+        self.exposed_sides = exposed_sides
         self.faces: list[pygame.SurfaceType] = [choice(img.cobblestones).copy() for _ in range(5)]
         for face in self.faces:
             face.blit(choice(img.cracks), (0, 0), special_flags=BLEND_RGB_SUB)
@@ -49,25 +50,40 @@ class Wall:
     def build_images(self) -> list[pygame.SurfaceType]:
         images = []
 
-        r = RESOLUTION
-        for i in range(15):
+        for layer in range(15):
             images.append(surf := pygame.Surface((64, 64)))
-            surf.blit(self.side_faces[0].subsurface((0, 64 - i * r - r, 64, r)), (0, 0))
-            surf.blit(pygame.transform.rotate(self.side_faces[1].subsurface((0, 64 - i * r - r, 64, r)), 90), (0, 0))
-            surf.blit(pygame.transform.rotate(self.side_faces[2].subsurface((0, 64 - i * r - r, 64, r)), 180), (0, 64 - r))
-            surf.blit(pygame.transform.rotate(self.side_faces[3].subsurface((0, 64 - i * r - r, 64, r)), 270), (64 - r, 0))
+            for i, exposed in enumerate(self.exposed_sides):
+                if exposed: continue
+                self.draw_edge(surf, i, layer)
+            for i, exposed in enumerate(self.exposed_sides):
+                if not exposed: continue
+                self.draw_edge(surf, i, layer)
 
         images.append(surf := choice(img.cobblestones).copy())
         surf.blit(choice(img.cracks), (0, 0), special_flags=BLEND_RGB_SUB)
 
         return images
 
+    def draw_edge(self, surf: pygame.SurfaceType, edge: int, layer: int) -> None:
+        edge_surf = self.side_faces[edge].subsurface((0, 64 - layer * RESOLUTION - RESOLUTION, 64, RESOLUTION))
+        surf.blit(pygame.transform.rotate(edge_surf, 90 * edge), [(0, 0), (0, 0), (0, 64 - RESOLUTION), (64 - RESOLUTION, 0)][edge])
+
 class WallGroup(StackedSprite):
-    def __init__(self, scene: Scene, positions: list[tuple[int, int]]) -> None:
+    def __init__(self, scene: Scene, positions: set[tuple[int, int]]) -> None:
         corner1 = VEC(min(pos[0] for pos in positions) * 64, min(pos[1] for pos in positions) * 64)
         corner2 = VEC(max(pos[0] for pos in positions) * 64 + 64, max(pos[1] for pos in positions) * 64 + 64)
         images = [pygame.Surface(corner2 - corner1, SRCALPHA) for _ in range(64 // RESOLUTION)]
-        walls = [Wall(pos) for pos in positions]
+
+        walls = []
+        for pos in positions:
+            exposed = [
+                (pos[0], pos[1] - 1) not in positions,
+                (pos[0] - 1, pos[1]) not in positions,
+                (pos[0], pos[1] + 1) not in positions,
+                (pos[0] + 1, pos[1]) not in positions,
+            ]
+            walls.append(Wall(pos, exposed))
+
         for layer, image in enumerate(images):
             for wall in walls:
                 image.blit(wall.images[layer], wall.pos - corner1)
