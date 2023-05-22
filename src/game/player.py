@@ -18,7 +18,7 @@ class Player(Sprite):
 
         self.camera = Camera(self.scene, self)
         self.image = pygame.Surface(self.size, SRCALPHA)
-        pygame.draw.circle(self.image, (255, 0, 0), self.size // 2, self.size.x // 2)
+        self.image.fill((255, 0, 0))
         self.image = Texture(self.manager.window, self.image, self.camera.shader)
 
     def update(self) -> None:
