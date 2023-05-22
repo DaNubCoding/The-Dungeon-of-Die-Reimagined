@@ -87,6 +87,7 @@ class Texture:
 
         self.texture = self.ctx.texture(self.surf.get_size(), 4, pygame.transform.flip(self.surf, False, True).get_view())
         self.texture.repeat_x, self.texture.repeat_y, self.texture.swizzle = False, False, "BGRA"
+        self.texture.filter = (moderngl.NEAREST, moderngl.NEAREST)
         self.size = size = VEC(self.surf.get_size())
 
         self.vbo = self.ctx.buffer(struct.pack("8f", *self.window.rect_vertices(size)))
