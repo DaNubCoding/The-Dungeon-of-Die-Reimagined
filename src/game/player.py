@@ -17,8 +17,8 @@ class Player(Sprite):
         self.rot = 0
 
         self.camera = Camera(self.scene, self)
-        self.image = pygame.Surface(self.size)
-        self.image.fill((255, 0, 0))
+        self.image = pygame.Surface(self.size, SRCALPHA)
+        pygame.draw.circle(self.image, (255, 0, 0), self.size // 2, self.size.x // 2)
         self.image = Texture(self.manager.window, self.image, self.camera.shader)
 
     def update(self) -> None:
@@ -35,9 +35,9 @@ class Player(Sprite):
             self.vel.x += self.speed
         self.pos += self.vel.rotate(-self.rot) * self.manager.dt
 
-        if keys[K_q]:
+        if keys[K_LEFT]:
             self.rot += self.rot_speed * self.manager.dt
-        if keys[K_e]:
+        if keys[K_RIGHT]:
             self.rot -= self.rot_speed * self.manager.dt
 
         self.camera.update()
