@@ -49,7 +49,7 @@ class Ground(Sprite):
         image = choice(img.cobblestones).copy()
         if randint(0, 1):
             image.blit(choice(img.cracks), (0, 0))
-        (trans_surf := pygame.Surface(image.get_size())).fill((15, 15, 15))
+        (trans_surf := pygame.Surface(image.get_size())).fill((17, 17, 17))
         image.blit(trans_surf, (0, 0), special_flags=BLEND_RGB_SUB)
         self.image = Texture(self.manager.window, image, self.scene.player.camera.shader)
 
