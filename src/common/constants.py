@@ -6,4 +6,4 @@ FPS = float("inf")
 WIDTH, HEIGHT = SIZE = 1024, 768
 HSIZE = (WIDTH // 2, HEIGHT // 2)
 
-RESOLUTION = 4
+RESOLUTION = 1

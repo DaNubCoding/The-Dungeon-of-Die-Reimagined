@@ -10,7 +10,7 @@ from src.common import *
 class TileManager:
     def __init__(self, scene: Scene) -> None:
         self.stacked_sprites: list[StackedSprite] = []
-        self.connected: list[set] = []
+        self.walls: set[tuple[int, int]] = set()
 
         _file = open("res/levels/1.txt", "r")
         y = 0
@@ -19,18 +19,11 @@ class TileManager:
                 if ch == ".":
                     Ground(scene, (x * 64, y * 64))
                 if ch != "#": continue
-                for chunk in self.connected:
-                    if (x - 1, y) in chunk: break
-                    if (x, y - 1) in chunk: break
-                else:
-                    self.connected.append({(x, y)})
-                    continue
-                chunk.add((x, y))
+                self.walls.add((x, y))
             y += 1
         _file.close()
 
-        for chunk in self.connected:
-            self.stacked_sprites.append(WallGroup(scene, chunk))
+        self.stacked_sprites.append(WallGroup(scene, self.walls))
 
         for i in range(64 // RESOLUTION):
             for sprite in self.stacked_sprites:
