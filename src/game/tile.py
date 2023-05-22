@@ -25,8 +25,7 @@ class Tile(StackedSprite):
     def __init__(self, scene: Scene, layer: int | Layers, faces: list[pygame.SurfaceType], pos: tuple[int, int]) -> None:
         self.side_faces = faces[:-1]
         self.top_face = faces[-1]
-        self.images = self.build_images()
-        super().__init__(scene, layer, self.images, pos)
+        super().__init__(scene, layer, self.build_images(), pos)
 
     def build_images(self) -> list[pygame.SurfaceType]:
         images = []

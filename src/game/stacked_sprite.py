@@ -7,13 +7,15 @@ from src.management.scene import Scene
 from src.common import *
 
 class StackedSprite(Sprite):
-    def __init__(self, scene: Scene, layer: int | Layers, layers: list[pygame.SurfaceType], pos: tuple[int, int]) -> None:
+    def __init__(self, scene: Scene, layer: int | Layers, images: list[pygame.SurfaceType], pos: tuple[int, int]) -> None:
         super().__init__(scene, layer)
         self.pos = VEC(pos)
         self.shader = Shader(self.manager.window, vert="res/shaders/stack.vert")
+        self.images = images
+        self.layers = []
 
     def build_layer(self, layer: int) -> None:
-        StackedSpriteLayer(self.scene, self, layer)
+        self.layers.append(StackedSpriteLayer(self.scene, self, layer))
 
     def update(self) -> None:
         self.shader.send("u_screenSize", SIZE)
