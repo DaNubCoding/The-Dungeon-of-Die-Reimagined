@@ -59,6 +59,8 @@ class Wall:
 
     def draw_edge(self, surf: pygame.SurfaceType, edge: int, layer: int) -> None:
         edge_surf = self.side_faces[edge].subsurface((0, 64 - layer * RESOLUTION - RESOLUTION, 64, RESOLUTION))
+        (trans_surf := pygame.Surface(edge_surf.get_size())).fill(((edge % 2 + 1) * 4 + (64 // RESOLUTION - layer) * 0.1, ) * 3)
+        edge_surf.blit(trans_surf, (0, 0), special_flags=BLEND_RGB_SUB)
         edge_surf = pygame.transform.scale(edge_surf, (edge_surf.get_width(), RESOLUTION + 1))
         surf.blit(pygame.transform.rotate(edge_surf, 90 * edge), [(0, 0), (0, 0), (0, 64 - RESOLUTION - 1), (64 - RESOLUTION - 1, 0)][edge])
 
