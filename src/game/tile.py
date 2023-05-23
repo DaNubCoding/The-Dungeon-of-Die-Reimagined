@@ -10,7 +10,8 @@ from src.common import *
 class TileManager:
     def __init__(self, scene: Scene) -> None:
         self.spracks: list[Sprack] = []
-        self.walls: set[tuple[int, int]] = set()
+        self.wall_positions: set[tuple[int, int]] = set()
+        self.walls = []
 
         _file = open("res/levels/1.txt", "r")
         y = 0
@@ -18,20 +19,22 @@ class TileManager:
             for x, ch in enumerate(line):
                 if ch == ".":
                     Ground(scene, (x * 64, y * 64))
-                if ch != "#": continue
-                self.walls.add((x, y))
+                if ch == "#":
+                    self.wall_positions.add((x, y))
             y += 1
         _file.close()
 
-        self.spracks.append(WallGroup(scene, self.walls))
+        self.spracks.append(WallGroup(scene, self, self.wall_positions))
 
         for i in range(64 // RESOLUTION):
             for sprite in self.spracks:
                 sprite.build_layer(i)
 
 class Wall:
-    def __init__(self, pos: tuple[int, int], exposed_sides: list[bool]) -> None:
+    def __init__(self, tile_manager: TileManager, pos: tuple[int, int], exposed_sides: list[bool]) -> None:
+        tile_manager.walls.append(self)
         self.pos = VEC(pos) * 64
+        self.rect = pygame.Rect(*self.pos, 64, 64)
         self.exposed_sides = exposed_sides
         self.faces: list[pygame.SurfaceType] = [choice(img.cobblestones).copy() for _ in range(5)]
         for face in self.faces:
@@ -65,7 +68,7 @@ class Wall:
         surf.blit(pygame.transform.rotate(edge_surf, 90 * edge), [(0, 0), (0, 0), (0, 64 - RESOLUTION - 1), (64 - RESOLUTION - 1, 0)][edge])
 
 class WallGroup(Sprack):
-    def __init__(self, scene: Scene, positions: set[tuple[int, int]]) -> None:
+    def __init__(self, scene: Scene, tile_manager: TileManager, positions: set[tuple[int, int]]) -> None:
         corner1 = VEC(min(pos[0] for pos in positions) * 64, min(pos[1] for pos in positions) * 64)
         corner2 = VEC(max(pos[0] for pos in positions) * 64 + 64, max(pos[1] for pos in positions) * 64 + 64)
         images = [pygame.Surface(corner2 - corner1, SRCALPHA) for _ in range(64 // RESOLUTION)]
@@ -78,11 +81,12 @@ class WallGroup(Sprack):
                 (pos[0], pos[1] + 1) not in positions,
                 (pos[0] + 1, pos[1]) not in positions,
             ]
-            walls.append(Wall(pos, exposed))
+            walls.append(Wall(tile_manager, pos, exposed))
 
         for layer, image in enumerate(images):
             for wall in walls:
                 image.blit(wall.images[layer], wall.pos - corner1)
+
         super().__init__(scene, Layers.WALL, images, corner1)
 
 class Ground(Sprite):
