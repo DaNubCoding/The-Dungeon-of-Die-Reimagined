@@ -2,14 +2,14 @@ from random import randint, choice
 from pygame.locals import *
 import pygame
 
-from src.game.stacked_sprite import StackedSprite
 from src.management.sprite import Sprite, Layers
 from src.management.scene import Scene
+from src.game.sprack import Sprack
 from src.common import *
 
 class TileManager:
     def __init__(self, scene: Scene) -> None:
-        self.stacked_sprites: list[StackedSprite] = []
+        self.spracks: list[Sprack] = []
         self.walls: set[tuple[int, int]] = set()
 
         _file = open("res/levels/1.txt", "r")
@@ -23,10 +23,10 @@ class TileManager:
             y += 1
         _file.close()
 
-        self.stacked_sprites.append(WallGroup(scene, self.walls))
+        self.spracks.append(WallGroup(scene, self.walls))
 
         for i in range(64 // RESOLUTION):
-            for sprite in self.stacked_sprites:
+            for sprite in self.spracks:
                 sprite.build_layer(i)
 
 class Wall:
@@ -64,7 +64,7 @@ class Wall:
         edge_surf = pygame.transform.scale(edge_surf, (edge_surf.get_width(), RESOLUTION + 1))
         surf.blit(pygame.transform.rotate(edge_surf, 90 * edge), [(0, 0), (0, 0), (0, 64 - RESOLUTION - 1), (64 - RESOLUTION - 1, 0)][edge])
 
-class WallGroup(StackedSprite):
+class WallGroup(Sprack):
     def __init__(self, scene: Scene, positions: set[tuple[int, int]]) -> None:
         corner1 = VEC(min(pos[0] for pos in positions) * 64, min(pos[1] for pos in positions) * 64)
         corner2 = VEC(max(pos[0] for pos in positions) * 64 + 64, max(pos[1] for pos in positions) * 64 + 64)

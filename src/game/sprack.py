@@ -1,4 +1,3 @@
-from random import choice, randint
 from pygame.locals import *
 import pygame
 
@@ -6,16 +5,16 @@ from src.management.sprite import Sprite, Layers
 from src.management.scene import Scene
 from src.common import *
 
-class StackedSprite(Sprite):
+class Sprack(Sprite):
     def __init__(self, scene: Scene, layer: int | Layers, images: list[pygame.SurfaceType], pos: tuple[int, int]) -> None:
         super().__init__(scene, layer)
         self.pos = VEC(pos)
-        self.shader = Shader(self.manager.window, vert="res/shaders/stack.vert")
+        self.shader = Shader(self.manager.window, vert="res/shaders/sprack.vert")
         self.images = images
         self.layers = []
 
     def build_layer(self, layer: int) -> None:
-        self.layers.append(StackedSpriteLayer(self.scene, self, layer))
+        self.layers.append(SprackLayer(self.scene, self, layer))
 
     def update(self) -> None:
         self.shader.send("u_screenSize", SIZE)
@@ -25,8 +24,8 @@ class StackedSprite(Sprite):
         self.shader.send("u_cameraScale", self.scene.player.camera.scale)
         self.shader.send("u_resolution", RESOLUTION)
 
-class StackedSpriteLayer(Sprite):
-    def __init__(self, scene: Scene, parent: StackedSprite, layer: int) -> None:
+class SprackLayer(Sprite):
+    def __init__(self, scene: Scene, parent: Sprack, layer: int) -> None:
         super().__init__(scene, parent._layer)
         self.parent = parent
         self.layer = layer
