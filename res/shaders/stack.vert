@@ -1,7 +1,7 @@
 #version 330 core
 
 uniform vec2 u_position, u_targetSize, u_screenSize, u_cameraPos;
-uniform float u_cameraRot;
+uniform float u_cameraRot, u_cameraScale;
 uniform int u_layer, u_resolution;
 
 in vec3 vertexPos;
@@ -16,6 +16,6 @@ vec2 offset = u_position - u_cameraPos + u_screenSize / 2 - u_targetSize / 2;
 
 void main()
 {
-    gl_Position = vec4((rotationMatrix * (vertexPos.xy / pixel + offset) - vec2(0, u_layer * u_resolution)) * pixel, 0.0, 1.0);
+    gl_Position = vec4((rotationMatrix * (vertexPos.xy / pixel + offset) - vec2(0, u_layer * u_resolution)) * u_cameraScale * pixel, 0.0, 1.0);
     fragmentTexCoord = vertexTexCoord;
 }

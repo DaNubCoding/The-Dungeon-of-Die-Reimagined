@@ -22,6 +22,7 @@ class StackedSprite(Sprite):
         self.shader.send("u_targetSize", self.scene.player.size)
         self.shader.send("u_cameraPos", self.scene.player.camera.pos)
         self.shader.send("u_cameraRot", self.scene.player.camera.rot)
+        self.shader.send("u_cameraScale", self.scene.player.camera.scale)
         self.shader.send("u_resolution", RESOLUTION)
 
 class StackedSpriteLayer(Sprite):
