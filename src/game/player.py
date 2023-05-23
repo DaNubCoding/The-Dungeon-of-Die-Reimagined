@@ -41,20 +41,22 @@ class Player(Sprite):
             self.rot -= self.rot_speed * self.manager.dt
 
         self.pos.x += floor(self.vel.x) * self.manager.dt
+        self.rect = pygame.Rect(self.pos, self.size)
         for tile in self.scene.tile_manager.walls:
-            if tile.rect.colliderect(pygame.Rect(self.pos, self.size)):
-                if self.vel.x < 0:
-                    self.pos.x = tile.rect.right
-                elif self.vel.x > 0:
-                    self.pos.x = tile.rect.left - self.size.x
+            if not tile.rect.colliderect(self.rect): continue
+            if self.vel.x < 0:
+                self.pos.x = tile.rect.right
+            elif self.vel.x > 0:
+                self.pos.x = tile.rect.left - self.size.x
 
         self.pos.y += floor(self.vel.y) * self.manager.dt
+        self.rect = pygame.Rect(self.pos, self.size)
         for tile in self.scene.tile_manager.walls:
-            if tile.rect.colliderect(pygame.Rect(self.pos, self.size)):
-                if self.vel.y < 0:
-                    self.pos.y = tile.rect.bottom
-                elif self.vel.y > 0:
-                    self.pos.y = tile.rect.top - self.size.y
+            if not tile.rect.colliderect(self.rect): continue
+            if self.vel.y < 0:
+                self.pos.y = tile.rect.bottom
+            elif self.vel.y > 0:
+                self.pos.y = tile.rect.top - self.size.y
 
         self.camera.update()
 
