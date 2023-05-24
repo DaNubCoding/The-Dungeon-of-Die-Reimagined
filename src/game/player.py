@@ -10,10 +10,10 @@ class Player(Sprite):
     def __init__(self, scene: Scene) -> None:
         super().__init__(scene, Layers.PLAYER)
         self.size = VEC(48, 48)
-        self.pos = VEC(64, 64)
+        self.pos = VEC(3, 6) * 64
         self.vel = VEC(0, 0)
         self.speed = 3
-        self.rot_speed = 1
+        self.rot_speed = 1.8
         self.rot = 0
 
         self.camera = Camera(self.scene, self)

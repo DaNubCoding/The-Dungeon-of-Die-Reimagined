@@ -22,11 +22,11 @@ class Camera:
     def update(self) -> None:
         offset = self.player.pos - self.pos
         offset = snap(offset, VEC(), VEC(1, 1))
-        self.pos += offset * 0.15 * self.manager.dt
+        self.pos += offset * 0.1 * self.manager.dt
 
         rot_offset = self.player.rot - self.rot
         rot_offset = snap(rot_offset, 0, 1)
-        self.rot += rot_offset * 0.15 * self.manager.dt
+        self.rot += rot_offset * 0.08 * self.manager.dt
 
         keys = pygame.key.get_pressed()
         if keys[K_UP]:
