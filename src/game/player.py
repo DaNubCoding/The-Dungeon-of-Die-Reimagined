@@ -3,23 +3,25 @@ import pygame
 
 from src.management.sprite import Sprite, Layers
 from src.management.scene import Scene
+from src.game.sprack import Sprack
 from src.game.camera import Camera
 from src.common import *
 
-class Player(Sprite):
+class Player(Sprack):
     def __init__(self, scene: Scene) -> None:
-        super().__init__(scene, Layers.PLAYER)
-        self.size = VEC(48, 48)
+        self.size = VEC(32, 32)
         self.pos = VEC(3, 6) * 64
         self.vel = VEC(0, 0)
         self.speed = 3
         self.rot_speed = 1.8
         self.rot = 0
 
-        self.camera = Camera(self.scene, self)
         self.image = pygame.Surface(self.size, SRCALPHA)
         self.image.fill((255, 0, 0))
-        self.image = Texture(self.manager.window, self.image, self.camera.shader)
+
+        super().__init__(scene, [self.image] * 48, self.pos)
+
+        self.camera = Camera(self.scene, self)
 
     def update(self) -> None:
         keys = pygame.key.get_pressed()
@@ -60,5 +62,4 @@ class Player(Sprite):
 
         self.camera.update()
 
-    def draw(self) -> None:
-        self.manager.window.render(self.image, self.pos)
+        super().update()

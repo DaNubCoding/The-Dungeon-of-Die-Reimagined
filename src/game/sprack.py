@@ -6,14 +6,16 @@ from src.management.scene import Scene
 from src.common import *
 
 class Sprack(Sprite):
-    def __init__(self, scene: Scene, layer: int | Layers, images: list[pygame.SurfaceType], pos: tuple[int, int]) -> None:
-        super().__init__(scene, layer)
+    def __init__(self, scene: Scene, images: list[pygame.SurfaceType], pos: tuple[int, int]) -> None:
+        super().__init__(scene, Layers.SPRACKS)
+        self.scene.spracks.append(self)
         self.pos = VEC(pos)
         self.shader = Shader(self.manager.window, vert="res/shaders/sprack.vert")
         self.images = images
         self.layers = []
 
     def build_layer(self, layer: int) -> None:
+        if layer >= len(self.images): return
         self.layers.append(SprackLayer(self.scene, self, layer))
 
     def update(self) -> None:

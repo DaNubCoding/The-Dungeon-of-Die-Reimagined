@@ -8,8 +8,7 @@ from enum import Enum, auto
 
 class Layers(Enum):
     GROUND = auto()
-    PLAYER = auto()
-    WALL = auto()
+    SPRACKS = auto()
 
 class Sprite(AbstractClass):
     def __init__(self, scene: Scene, layer: int | Layers) -> None:

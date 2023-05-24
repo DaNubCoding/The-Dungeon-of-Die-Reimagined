@@ -24,11 +24,7 @@ class TileManager:
             y += 1
         _file.close()
 
-        self.spracks.append(WallGroup(scene, self, self.wall_positions))
-
-        for i in range(64 // RESOLUTION):
-            for sprite in self.spracks:
-                sprite.build_layer(i)
+        WallGroup(scene, self, self.wall_positions)
 
 class Wall:
     def __init__(self, tile_manager: TileManager, pos: tuple[int, int], exposed_sides: list[bool]) -> None:
@@ -87,7 +83,7 @@ class WallGroup(Sprack):
             for wall in walls:
                 image.blit(wall.images[layer], wall.pos - corner1)
 
-        super().__init__(scene, Layers.WALL, images, corner1)
+        super().__init__(scene, images, corner1)
 
 class Ground(Sprite):
     def __init__(self, scene: Scene, pos: tuple[int, int]) -> None:
