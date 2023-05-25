@@ -42,7 +42,7 @@ class Player(Sprack):
         if keys[K_RIGHT]:
             self.rot -= self.rot_speed * self.manager.dt
 
-        self.pos.x += floor(self.vel.x) * self.manager.dt
+        self.pos.x += self.vel.x * self.manager.dt
         self.rect = pygame.Rect(self.pos, self.size)
         for tile in self.scene.tile_manager.walls:
             if not tile.rect.colliderect(self.rect): continue
@@ -51,7 +51,7 @@ class Player(Sprack):
             elif self.vel.x > 0:
                 self.pos.x = tile.rect.left - self.size.x
 
-        self.pos.y += floor(self.vel.y) * self.manager.dt
+        self.pos.y += self.vel.y * self.manager.dt
         self.rect = pygame.Rect(self.pos, self.size)
         for tile in self.scene.tile_manager.walls:
             if not tile.rect.colliderect(self.rect): continue
