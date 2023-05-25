@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from src.game.player import Player
+    from game.dice import Dice
 
 from pygame.locals import *
 import pygame
@@ -10,7 +10,7 @@ from src.management.scene import Scene
 from src.common import *
 
 class Camera:
-    def __init__(self, scene: Scene, player: Player) -> None:
+    def __init__(self, scene: Scene, player: Dice) -> None:
         self.manager = scene.manager
         self.scene = scene
         self.player = player

@@ -6,7 +6,7 @@ from src.game.sprack import Sprack
 from src.game.camera import Camera
 from src.common import *
 
-class Player(Sprack):
+class Dice(Sprack):
     def __init__(self, scene: Scene) -> None:
         self.size = VEC(32, 32)
         self.pos = VEC(3, 6) * 64
