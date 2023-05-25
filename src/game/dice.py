@@ -24,10 +24,10 @@ class Dice(Sprack):
 
         for layer in range(64 // RESOLUTION - 1):
             images.append(surf := pygame.Surface(self.size))
-            surf.blit(img.dice[0].subsurface((0, layer, 64, RESOLUTION + 1)), (0, 0))
-            surf.blit(img.dice[5].subsurface((0, layer, 64, RESOLUTION + 1)), (0, 64 - RESOLUTION - 1))
-            surf.blit(pygame.transform.rotate(img.dice[1].subsurface((0, layer, 64, RESOLUTION + 1)), 90), (0, 0))
-            surf.blit(pygame.transform.rotate(img.dice[4].subsurface((0, layer, 64, RESOLUTION + 1)), 90), (64 - RESOLUTION - 1, 0))
+            surf.blit(pygame.transform.scale(img.dice[0].subsurface((0, layer * RESOLUTION, 64, RESOLUTION)), (64, RESOLUTION + 1)), (0, 0))
+            surf.blit(pygame.transform.scale(img.dice[5].subsurface((0, layer * RESOLUTION, 64, RESOLUTION)), (64, RESOLUTION + 1)), (0, 64 - RESOLUTION - 1))
+            surf.blit(pygame.transform.rotate(pygame.transform.scale(img.dice[1].subsurface((0, layer * RESOLUTION, 64, RESOLUTION)), (64, RESOLUTION + 1)), 90), (0, 0))
+            surf.blit(pygame.transform.rotate(pygame.transform.scale(img.dice[4].subsurface((0, layer * RESOLUTION, 64, RESOLUTION)), (64, RESOLUTION + 1)), 90), (64 - RESOLUTION - 1, 0))
 
         images.append(surf := pygame.Surface(self.size))
         surf.blit(img.dice[2], (0, 0))
