@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from random import randint, choice
 from pygame.locals import *
 import pygame
@@ -17,18 +19,20 @@ class TileManager:
         y = 0
         while line := _file.readline():
             for x, ch in enumerate(line):
-                if ch == ".":
-                    Ground(scene, (x * 64, y * 64))
+                if ch == " ": continue
+                Ground(scene, (x * 64, y * 64))
                 if ch == "#":
                     self.wall_positions.add((x, y))
             y += 1
         _file.close()
 
-        WallGroup(scene, self, self.wall_positions)
+        WallGroup(scene, self, self.wall_positions) 
 
-class Wall:
-    def __init__(self, tile_manager: TileManager, pos: tuple[int, int], exposed_sides: list[bool]) -> None:
+class Wall(Sprite):
+    def __init__(self, scene: Scene, tile_manager: TileManager, group: WallGroup, pos: tuple[int, int], exposed_sides: list[bool]) -> None:
+        super().__init__(scene, Layers.SPRACKS)
         tile_manager.walls.append(self)
+        self.group = group
         self.pos = VEC(pos) * 64
         self.rect = pygame.Rect(*self.pos, 64, 64)
         self.exposed_sides = exposed_sides
@@ -39,14 +43,24 @@ class Wall:
         self.top_face = self.faces[-1]
         self.images = self.build_images()
 
+        self.screen_pos = VEC(0, 0)
+
     def build_images(self) -> list[pygame.SurfaceType]:
         images = []
 
+        for layer in range(64 // RESOLUTION):
+            images.append(surf := pygame.Surface((64, 64), SRCALPHA))
+            for i, exposed in enumerate(self.exposed_sides):
+                if exposed: continue
+                # self.draw_edge(surf, i, layer)
+            for i, exposed in enumerate(self.exposed_sides):
+                if not exposed: continue
+                self.draw_edge(surf, i, layer)
         for layer in range(64 // RESOLUTION - 1):
             images.append(surf := pygame.Surface((64, 64), SRCALPHA))
             for i, exposed in enumerate(self.exposed_sides):
                 if exposed: continue
-                self.draw_edge(surf, i, layer)
+                # self.draw_edge(surf, i, layer)
             for i, exposed in enumerate(self.exposed_sides):
                 if not exposed: continue
                 self.draw_edge(surf, i, layer)
@@ -58,16 +72,20 @@ class Wall:
 
     def draw_edge(self, surf: pygame.SurfaceType, edge: int, layer: int) -> None:
         edge_surf = self.side_faces[edge].subsurface((0, 64 - layer * RESOLUTION - RESOLUTION, 64, RESOLUTION))
-        (trans_surf := pygame.Surface(edge_surf.get_size())).fill(((edge % 2 + 1) * 4 + (64 // RESOLUTION - layer) * 0.1, ) * 3)
-        edge_surf.blit(trans_surf, (0, 0), special_flags=BLEND_RGB_SUB)
         edge_surf = pygame.transform.scale(edge_surf, (edge_surf.get_width(), RESOLUTION + 1))
         surf.blit(pygame.transform.rotate(edge_surf, 90 * edge), [(0, 0), (0, 0), (0, 64 - RESOLUTION - 1), (64 - RESOLUTION - 1, 0)][edge])
 
+    def update(self) -> None:
+        camera = self.scene.player.camera
+        self.screen_pos = (self.pos - camera.pos).rotate(camera.rot) + VEC(SIZE) // 2
+        if HEIGHT // 2 + 10 < self.screen_pos.y < HEIGHT // 2 + 180 and WIDTH // 2 - 100 < self.screen_pos.x < WIDTH // 2 + 100:
+            self.group.obstructing.append(self.pos - self.group.pos)
+
 class WallGroup(Sprack):
     def __init__(self, scene: Scene, tile_manager: TileManager, positions: set[tuple[int, int]]) -> None:
-        corner1 = VEC(min(pos[0] for pos in positions) * 64, min(pos[1] for pos in positions) * 64)
-        corner2 = VEC(max(pos[0] for pos in positions) * 64 + 64, max(pos[1] for pos in positions) * 64 + 64)
-        images = [pygame.Surface(corner2 - corner1, SRCALPHA) for _ in range(64 // RESOLUTION)]
+        self.pos = VEC(min(pos[0] for pos in positions) * 64, min(pos[1] for pos in positions) * 64)
+        self.bottomright = VEC(max(pos[0] for pos in positions) * 64 + 64, max(pos[1] for pos in positions) * 64 + 64)
+        images = [pygame.Surface(self.bottomright - self.pos, SRCALPHA) for _ in range(128 // RESOLUTION)]
 
         walls = []
         for pos in positions:
@@ -77,13 +95,21 @@ class WallGroup(Sprack):
                 (pos[0], pos[1] + 1) not in positions,
                 (pos[0] + 1, pos[1]) not in positions,
             ]
-            walls.append(Wall(tile_manager, pos, exposed))
+            walls.append(Wall(scene, tile_manager, self, pos, exposed))
 
         for layer, image in enumerate(images):
             for wall in walls:
-                image.blit(wall.images[layer], wall.pos - corner1)
+                image.blit(wall.images[layer], wall.pos - self.pos)
 
-        super().__init__(scene, images, corner1)
+        self.obstructing = []
+
+        super().__init__(scene, images, self.pos)
+
+    def update(self) -> None:
+        super().update()
+        self.shader.send("u_obstructing", self.obstructing)
+        self.shader.send("u_obstructingLen", len(self.obstructing))
+        self.obstructing = []
 
 class Ground(Sprite):
     def __init__(self, scene: Scene, pos: tuple[int, int]) -> None:

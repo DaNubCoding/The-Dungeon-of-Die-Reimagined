@@ -10,7 +10,7 @@ class MainGame(Scene):
         self.player = Dice(self)
         self.tile_manager = TileManager(self)
 
-        for i in range(64 // RESOLUTION):
+        for i in range(128 // RESOLUTION):
             for sprite in self.spracks:
                 sprite.build_layer(i)
 

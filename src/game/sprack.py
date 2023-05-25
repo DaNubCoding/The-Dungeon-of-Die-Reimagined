@@ -10,7 +10,7 @@ class Sprack(Sprite):
         super().__init__(scene, Layers.SPRACKS)
         self.scene.spracks.append(self)
         self.pos = VEC(pos)
-        self.shader = Shader(self.manager.window, vert="res/shaders/sprack.vert")
+        self.shader = Shader(self.manager.window, "res/shaders/sprack.frag", "res/shaders/sprack.vert")
         self.images = images
         self.layers = []
 
