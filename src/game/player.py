@@ -1,7 +1,6 @@
 from pygame.locals import *
 import pygame
 
-from src.management.sprite import Sprite, Layers
 from src.management.scene import Scene
 from src.game.sprack import Sprack
 from src.game.camera import Camera

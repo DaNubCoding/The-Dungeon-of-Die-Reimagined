@@ -1,11 +1,6 @@
-from random import choice, randint
-from pygame.locals import *
-import pygame
-
 from src.management.scene import Scene
 from src.game.tile import TileManager
 from src.game.player import Player
-from src.game.camera import Camera
 from src.common import *
 
 class MainGame(Scene):
