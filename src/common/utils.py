@@ -23,5 +23,3 @@ def snap(val: VEC, snap_val: VEC, offset: VEC):
     if snap_val.y - offset.x < val.y < snap_val.y + offset.y:
         val.y = snap_val.y
     return val.copy()
-
-screen_pos = lambda sprite, cam: (sprite.pos - cam.pos).rotate(cam.rot) + HSIZE - sprite.size // 2

@@ -8,19 +8,31 @@ from src.common import *
 
 class Dice(Sprack):
     def __init__(self, scene: Scene) -> None:
-        self.size = VEC(32, 32)
+        self.size = VEC(64, 64)
         self.pos = VEC(3, 6) * 64
         self.vel = VEC(0, 0)
         self.speed = 3
         self.rot_speed = 1.8
         self.rot = 0
 
-        self.image = pygame.Surface(self.size, SRCALPHA)
-        self.image.fill((255, 0, 0))
-
-        super().__init__(scene, [self.image] * 48, self.pos)
+        super().__init__(scene, self.build_images(), self.pos)
 
         self.camera = Camera(self.scene, self)
+
+    def build_images(self) -> list[pygame.SurfaceType]:
+        images = []
+
+        for layer in range(64 // RESOLUTION - 1):
+            images.append(surf := pygame.Surface(self.size))
+            surf.blit(img.dice[0].subsurface((0, layer, 64, RESOLUTION + 1)), (0, 0))
+            surf.blit(img.dice[5].subsurface((0, layer, 64, RESOLUTION + 1)), (0, 64 - RESOLUTION - 1))
+            surf.blit(pygame.transform.rotate(img.dice[1].subsurface((0, layer, 64, RESOLUTION + 1)), 90), (0, 0))
+            surf.blit(pygame.transform.rotate(img.dice[4].subsurface((0, layer, 64, RESOLUTION + 1)), 90), (64 - RESOLUTION - 1, 0))
+
+        images.append(surf := pygame.Surface(self.size))
+        surf.blit(img.dice[2], (0, 0))
+
+        return images
 
     def update(self) -> None:
         keys = pygame.key.get_pressed()
