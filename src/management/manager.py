@@ -55,6 +55,7 @@ class GameManager:
         pygame.display.set_caption(f"Pygame | FPS: {round(self.clock.get_fps())}")
         
         self.events = {event.type: event for event in pygame.event.get()}
+        self.key_downs = {event.key for _type, event in self.events.items() if _type == KEYDOWN}
 
         if QUIT in self.events:
             self.quit()

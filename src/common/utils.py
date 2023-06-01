@@ -6,6 +6,7 @@ from src.common.constants import HSIZE, VEC
 
 inttup = lambda tup: tuple(map(floor, tup))
 intvec = lambda vec: VEC(floor(vec.x), floor(vec.y))
+sign = lambda num: (num > 0) - (num < 0)
 
 # The snap function snaps a value to a central value if it enters a certain offset around the central value
 @dispatch((int, float), (int, float), (int, float))
