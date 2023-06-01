@@ -13,7 +13,7 @@ class Level:
         print("Loading level layout...")
         self.load()
 
-        print("Creating ground")
+        print("Creating ground...")
         self.ground_group = SprackGroup(self.scene, self)
         for pos in self.ground_positions:
             Ground(self.scene, self, VEC(pos) * 64)
