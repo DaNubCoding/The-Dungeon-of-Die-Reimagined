@@ -11,7 +11,6 @@ from src.management.scene import Scene
 class WallGroup(SprackGroup):
     def __init__(self, scene: Scene, level: Level) -> None:
         super().__init__(scene, level, "wall")
-        self.obstructing = []
 
     def update(self) -> None:
         super().update()
