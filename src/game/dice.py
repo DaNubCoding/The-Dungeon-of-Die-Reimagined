@@ -8,6 +8,8 @@ from src.common import *
 
 class Dice(Sprack):
     def __init__(self, scene: Scene) -> None:
+        print("Loading player...")
+
         self.size = VEC(64, 64)
         self.pos = VEC(3, 6) * 64
         self.vel = VEC(0, 0)

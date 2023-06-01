@@ -10,9 +10,12 @@ class MainGame(Scene):
         self.player = Dice(self)
         self.level = Level(self, 1)
 
+        print("Building sprack layers")
         for i in range(128 // RESOLUTION):
             for sprite in self.spracks:
                 sprite.build_layer(i)
+
+        print("Completed, starting game")
 
     def update(self) -> None:
         super().update()

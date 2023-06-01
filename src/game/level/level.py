@@ -10,15 +10,17 @@ class Level:
     def __init__(self, scene: Scene, level: int) -> None:
         self.scene = scene
         self.level_num = level
+        print("Loading level layout...")
         self.load()
 
+        print("Creating ground")
         self.ground_group = SprackGroup(self.scene, self)
-        self.wall_group = WallGroup(self.scene, self)
-
         for pos in self.ground_positions:
             Ground(self.scene, self, VEC(pos) * 64)
         self.ground_group.setup()
 
+        print("Creating walls...")
+        self.wall_group = WallGroup(self.scene, self)
         for pos in self.wall_positions:
             Wall(self.scene, self, pos, exposed_sides(pos, self.wall_positions))
         self.wall_group.setup()
