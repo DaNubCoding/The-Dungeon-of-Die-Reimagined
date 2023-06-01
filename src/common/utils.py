@@ -1,5 +1,6 @@
 from multipledispatch import dispatch
 from math import floor
+import pygame
 
 from src.common.constants import HSIZE, VEC
 
@@ -23,3 +24,9 @@ def snap(val: VEC, snap_val: VEC, offset: VEC):
     if snap_val.y - offset.x < val.y < snap_val.y + offset.y:
         val.y = snap_val.y
     return val.copy()
+
+def darken(image: pygame.SurfaceType, amount: int) -> pygame.SurfaceType:
+    trans_surf = pygame.Surface(image.get_size())
+    trans_surf.fill((amount, ) * 3)
+    image.blit(trans_surf, (0, 0), special_flags=pygame.BLEND_RGB_SUB)
+    return image

@@ -23,13 +23,13 @@ class Dice(Sprack):
         images = []
 
         for layer in range(64 // RESOLUTION - 1):
-            images.append(surf := pygame.Surface(self.size))
+            images.append(surf := pygame.Surface(self.size, SRCALPHA))
             surf.blit(pygame.transform.scale(img.dice[0].subsurface((0, layer * RESOLUTION, 64, RESOLUTION)), (64, RESOLUTION + 1)), (0, 0))
             surf.blit(pygame.transform.scale(img.dice[5].subsurface((0, layer * RESOLUTION, 64, RESOLUTION)), (64, RESOLUTION + 1)), (0, 64 - RESOLUTION - 1))
             surf.blit(pygame.transform.rotate(pygame.transform.scale(img.dice[1].subsurface((0, layer * RESOLUTION, 64, RESOLUTION)), (64, RESOLUTION + 1)), 90), (0, 0))
             surf.blit(pygame.transform.rotate(pygame.transform.scale(img.dice[4].subsurface((0, layer * RESOLUTION, 64, RESOLUTION)), (64, RESOLUTION + 1)), 90), (64 - RESOLUTION - 1, 0))
 
-        images.append(surf := pygame.Surface(self.size))
+        images.append(surf := pygame.Surface(self.size, SRCALPHA))
         surf.blit(img.dice[2], (0, 0))
 
         return images
@@ -55,7 +55,7 @@ class Dice(Sprack):
 
         self.pos.x += self.vel.x * self.manager.dt
         self.rect = pygame.Rect(self.pos, self.size)
-        for tile in self.scene.tile_manager.walls:
+        for tile in self.scene.level.wall_group:
             if not tile.rect.colliderect(self.rect): continue
             if self.vel.x < 0:
                 self.pos.x = tile.rect.right
@@ -64,7 +64,7 @@ class Dice(Sprack):
 
         self.pos.y += self.vel.y * self.manager.dt
         self.rect = pygame.Rect(self.pos, self.size)
-        for tile in self.scene.tile_manager.walls:
+        for tile in self.scene.level.wall_group:
             if not tile.rect.colliderect(self.rect): continue
             if self.vel.y < 0:
                 self.pos.y = tile.rect.bottom

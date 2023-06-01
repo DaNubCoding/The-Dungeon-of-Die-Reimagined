@@ -76,6 +76,9 @@ class Shader:
         self.send("u_position", pos)
         self.send("u_screenSize", self.window.size)
 
+    def release(self) -> None:
+        self.program.release()
+
 class Texture:
     def __init__(self, window: Window, src: pygame.Surface | str, shader: Optional[Shader] = None) -> None:
         self.window = window
@@ -96,3 +99,8 @@ class Texture:
 
     def move(self, pos: tuple[int, int]) -> None:
         self.shader.move(pos)
+
+    def release(self) -> None:
+        self.texture.release()
+        self.vbo.release()
+        self.vao.release()
