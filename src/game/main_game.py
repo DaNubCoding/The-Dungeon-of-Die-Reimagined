@@ -9,8 +9,6 @@ class MainGame(Scene):
         self.spracks = []
         self.player = Dice(self)
         self.level = Level(self, 1)
-        for sprack in self.spracks:
-            print(sprack.__class__.__name__)
 
         for i in range(128 // RESOLUTION):
             for sprite in self.spracks:
