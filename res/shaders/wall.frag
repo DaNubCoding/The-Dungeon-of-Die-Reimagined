@@ -13,7 +13,7 @@ vec2 pixel = 1.0 / u_texSize;
 void main() {
     color = texture2D(u_imageTexture, fragmentTexCoord);
     float dist = distance(u_playerPos, vec2(fragmentTexCoord.x, 1 - fragmentTexCoord.y) / pixel);
-    if (dist < 200) {
-        color.a *= pow(dist / 200, 2);
+    if (dist < 160) {
+        color.a *= pow(dist / 160, 2) + 0.1;
     }
 }

@@ -21,9 +21,6 @@ _side_positions = [(0, 0), (0, 0), (0, 64 - RESOLUTION - 1), (64 - RESOLUTION - 
 def generate_layer(images: list[pygame.SurfaceType], layer: int, exposed: list[bool]) -> pygame.SurfaceType:
     surf = pygame.Surface((64, 64), pygame.SRCALPHA)
     for i, image in enumerate(images):
-        if exposed[i]: continue
-        _draw_side(surf, image, i, layer)
-    for i, image in enumerate(images):
         if not exposed[i]: continue
         _draw_side(surf, image, i, layer)
     return surf
