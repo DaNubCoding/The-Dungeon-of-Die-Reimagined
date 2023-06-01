@@ -26,9 +26,3 @@ class Wall(Sprack):
         images += [generate_layer(self.side_faces[4:], layer, self.exposed) for layer in range(64 // RESOLUTION - 1)]
         images.append(self.top_face)
         return images
-
-    def update(self) -> None:
-        super().update()
-        self.screen_pos = (self.pos - self.scene.player.camera.pos).rotate(self.scene.player.camera.rot) + VEC(SIZE) // 2
-        if HEIGHT // 2 + 10 < self.screen_pos.y < HEIGHT // 2 + 180 and WIDTH // 2 - 100 < self.screen_pos.x < WIDTH // 2 + 100:
-            self.group.obstructing.append(self.pos - self.group.pos)

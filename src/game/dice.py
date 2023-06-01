@@ -74,3 +74,7 @@ class Dice(Sprack):
         self.camera.update()
 
         super().update()
+
+    @property
+    def center(self) -> tuple[int, int]:
+        return self.pos + self.size // 2

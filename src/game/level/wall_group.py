@@ -15,7 +15,4 @@ class WallGroup(SprackGroup):
 
     def update(self) -> None:
         super().update()
-
-        self.shader.send("u_obstructing", self.obstructing)
-        self.shader.send("u_obstructingLen", len(self.obstructing))
-        self.obstructing = []
+        self.shader.send("u_playerPos", self.scene.player.center - self.pos)
