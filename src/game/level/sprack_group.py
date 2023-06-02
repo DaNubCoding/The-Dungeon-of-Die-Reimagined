@@ -42,8 +42,8 @@ class SprackGroup(Sprack):
         self.spracks.append(sprack)
 
         self.min_x = min(self.min_x, sprack.pos.x)
-        self.max_x = max(self.max_x, sprack.pos.x)
-        self.min_y = min(self.min_y, sprack.pos.y + sprack.size.x)
+        self.max_x = max(self.max_x, sprack.pos.x + sprack.size.x)
+        self.min_y = min(self.min_y, sprack.pos.y)
         self.max_y = max(self.max_y, sprack.pos.y + sprack.size.y)
 
         self.pos = VEC(self.min_x, self.min_y)
