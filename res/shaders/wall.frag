@@ -23,16 +23,16 @@ void main() {
     float angle = 0.0;
     if (color.a < 1.0 / 10) {
         angle = angle_diff(u_playerRot, PI / 2);
-        alpha_factor = sqrt(angle / PI) * 1.7;
+        alpha_factor = sqrt(angle / PI * 1.7);
     } else if (color.a < 2.0 / 10) {
         angle = angle_diff(u_playerRot, PI);
-        alpha_factor = sqrt(angle / PI) * 1.7;
+        alpha_factor = sqrt(angle / PI * 1.7);
     } else if (color.a < 3.0 / 10) {
         angle = angle_diff(u_playerRot, PI * 3 / 2);
-        alpha_factor = sqrt(angle / PI) * 1.7;
+        alpha_factor = sqrt(angle / PI * 1.7);
     } else if (color.a < 4.0 / 10) {
         angle = angle_diff(u_playerRot, 0.0);
-        alpha_factor = sqrt(angle / PI) * 1.7;
+        alpha_factor = sqrt(angle / PI * 1.7);
     } else if (color.a < 5.0 / 10) {
         alpha_factor = 1.5;
     }
