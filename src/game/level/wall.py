@@ -24,5 +24,6 @@ class Wall(Sprack):
     def build_images(self) -> list[pygame.SurfaceType]:
         images = [generate_layer(self.side_faces[:4], layer, self.exposed) for layer in range(64 // RESOLUTION)]
         images += [generate_layer(self.side_faces[4:], layer, self.exposed) for layer in range(64 // RESOLUTION - 1)]
-        images.append(self.top_face)
+        images.append(self.top_face.copy())
+        images[-1].set_alpha(4 * (255 / 10) + 5)
         return images

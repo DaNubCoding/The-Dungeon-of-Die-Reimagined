@@ -17,7 +17,6 @@ def exposed_sides(pos: tuple[int, int], positions: set[tuple[int, int]]) -> list
         (pos[0] + 1, pos[1]) not in positions,
     ]
 
-_side_positions = [(0, 0), (0, 0), (0, 64 - RESOLUTION - 1), (64 - RESOLUTION - 1, 0)]
 def generate_layer(images: list[pygame.SurfaceType], layer: int, exposed: list[bool]) -> pygame.SurfaceType:
     surf = pygame.Surface((64, 64), pygame.SRCALPHA)
     for i, image in enumerate(images):
@@ -25,7 +24,9 @@ def generate_layer(images: list[pygame.SurfaceType], layer: int, exposed: list[b
         _draw_side(surf, image, i, layer)
     return surf
 
+_side_positions = [(0, 0), (0, 0), (0, 64 - RESOLUTION - 1), (64 - RESOLUTION - 1, 0)]
 def _draw_side(surf: pygame.SurfaceType, image: pygame.SurfaceType, edge_num: int, layer: int) -> None:
     edge_surf = image.subsurface((0, 64 - layer * RESOLUTION - RESOLUTION, 64, RESOLUTION))
     edge_surf = pygame.transform.scale(edge_surf, (edge_surf.get_width(), RESOLUTION + 1))
+    edge_surf.set_alpha(edge_num * (255 / 10) + 5)
     surf.blit(pygame.transform.rotate(edge_surf, 90 * edge_num), _side_positions[edge_num])
