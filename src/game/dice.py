@@ -65,4 +65,7 @@ class Dice(Sprack):
             move = VEC(sign(move.x) * 64, 0)
         else:
             move = VEC(0, sign(move.y) * 64)
+
+        if inttup(self.pos // 64 + move.normalize()) in self.scene.level.wall_group.walls: return
+
         self.pos += move

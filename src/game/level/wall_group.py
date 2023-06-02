@@ -12,6 +12,11 @@ from src.common import *
 class WallGroup(SprackGroup):
     def __init__(self, scene: Scene, level: Level) -> None:
         super().__init__(scene, level, "wall")
+        self.walls = {}
+
+    def setup(self) -> None:
+        super().setup()
+        self.walls = {inttup(wall.pos // 64): wall for wall in self.spracks}
 
     def update(self) -> None:
         super().update()
