@@ -3,8 +3,14 @@ import pygame
 
 from src.common import *
 
-def cobblestone_texture() -> pygame.SurfaceType:
+def ground_texture() -> pygame.SurfaceType:
     image = choice(img.cobblestones).copy()
+    if randint(0, 1):
+        image.blit(choice(img.cracks), (0, 0), special_flags=pygame.BLEND_RGB_SUB)
+    return image
+
+def wall_texture() -> pygame.SurfaceType:
+    image = choice(img.walls).copy()
     if randint(0, 1):
         image.blit(choice(img.cracks), (0, 0), special_flags=pygame.BLEND_RGB_SUB)
     return image

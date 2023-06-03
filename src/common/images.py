@@ -20,6 +20,8 @@ for i in range(len(cracks)):
     cracks.append(pygame.transform.rotate(cracks[i], 180))
     cracks.append(pygame.transform.rotate(cracks[i], 270))
 
+walls = SpriteSheet("wall.png", scale=4)
+
 dice = SpriteSheet("dice.png", scale=4)
 
 pygame.display.quit()

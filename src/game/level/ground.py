@@ -11,5 +11,5 @@ from ._utils import *
 class Ground(Sprack):
     def __init__(self, scene: Scene, level: Level, pos: tuple[int, int]) -> None:
         self.level = level
-        images = [darken(cobblestone_texture(), 17)]
+        images = [darken(ground_texture(), 17)]
         super().__init__(scene, images, pos, self.level.ground_group)

@@ -15,7 +15,7 @@ class Wall(Sprack):
         self.level = level
 
         self.exposed = exposed
-        *self.side_faces, self.top_face = [cobblestone_texture() for _ in range(9)]
+        *self.side_faces, self.top_face = [darken(wall_texture(), 5) for _ in range(9)]
 
         super().__init__(scene, self.build_images(), VEC(pos) * 64, self.level.wall_group)
         self.screen_pos = self.pos.copy()
